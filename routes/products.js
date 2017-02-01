@@ -5,9 +5,12 @@ var products = {
 
 module.exports.fun = function(req, res){
     var output = '';
+    var id = 0;
     for(var name in products)
     {
-        output += `<li>${products[name].title}</li>`
+        id += 1;
+        output += `<li>${products[name].title}
+        <a href="cart/${id}">Add</a></li>`
     }
 
     res.send(`<h2>Products</h2>
@@ -32,7 +35,7 @@ module.exports.funAdd = function(req, res){
     
     res.cookie('cart', cart);
     console.log(cart);
-    res.send(cart);
+    res.redirect('/cart');
 }
 
 module.exports.funCart = function(req, res){
@@ -43,12 +46,28 @@ module.exports.funCart = function(req, res){
     }else{
         var output = '';
         for(var id in cart){
-            output += `<li>${products[id].title}(${cart[id]})</li>`;
+            output += `<li>${products[id].title}(${cart[id]})
+            <a href="deleteCart/${id}">Delete</a></li>`;
         }
     }
 
     res.send(`<h2>Cart</h2>
     <ul>${output}</ul>
-    <a href="/products>Products List</a>
+    <a href="/products">Products List</a>
     `);
+}
+
+module.exports.funDelete = function(req, res){
+    var id = req.params.id;
+    var cart = req.cookies.cart;
+    if(cart[id])
+    {
+        delete cart[id];
+        res.cookie('cart', cart);
+    }
+    else{
+       console.debug('No Item');
+    }
+
+    res.redirect('/products');
 }

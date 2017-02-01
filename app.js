@@ -10,6 +10,7 @@ app.get('/count', count.count);
 app.get('/products', products.fun);
 app.get('/cart/:id', products.funAdd);
 app.get('/cart', products.funCart);
+app.get('/deleteCart/:id', products.funDelete);
 
 app.listen(3000, function(req, res){
     console.log('Connected 3003 port');
